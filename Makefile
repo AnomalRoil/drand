@@ -58,7 +58,7 @@ clean:
 test: test-unit test-integration
 
 test-unit:
-	GO111MODULE=on go test -race -short -v ./...
+	GO111MODULE=on GORACE='history_size=4 strip_path_prefix="/home/runner/work/drand/drand/"' go test -race -short -v ./...
 
 test-unit-cover:
 	GO111MODULE=on go test -short -v -coverprofile=coverage.txt -covermode=count -coverpkg=all $(go list ./... | grep -v /demo/)
@@ -70,7 +70,7 @@ test-integration:
 coverage:
 	go install github.com/ory/go-acc@latest
 	go get -v -t -d ./...
-	COVERAGE=true go-acc ./...
+	COVERAGE=true go-acc ./... -- -v
 
 demo:
 	cd demo && go build && ./demo -build
